@@ -28,15 +28,12 @@ char	*get_next_line(int fd)
 	char		*ptr_parking;
 	int			bytes_read;
 	char		buffer[BUFFER_SIZE];
-	
 	int			i;
 	char		*result;
 
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == -1)
 		return (NULL);
-	
-	//printf("About to enter the loop \n");
 	while (bytes_read != 0)
 	{
 		if (stashes[fd] == NULL)
@@ -44,15 +41,13 @@ char	*get_next_line(int fd)
 			stashes[fd] = malloc(1);
 			if (stashes[fd] == NULL)
 				return (NULL);
-		// stashes[fd][0] = '\0';
 		}
-		while(buffer[i] != '\0')
+		while (buffer[i] != '\0')
 		{
 			if (buffer[i] != '\n')
 				i++;
 			else if (buffer[i] == '\n')
 			{
-			//	printf("We found a new line\n");
 				ptr_parking = stashes[fd];
 				result = ft_strjoin(ptr_parking, ft_substr(buffer, 0, i));
 				free(ptr_parking);
@@ -60,7 +55,6 @@ char	*get_next_line(int fd)
 				return (result);
 			}
 		}
-		// this should only trigger if we hit end of buffer without a newline
 		ptr_parking = stashes[fd];
 		stashes[fd] = ft_strjoin(ptr_parking, buffer);
 		free(ptr_parking);
@@ -68,7 +62,7 @@ char	*get_next_line(int fd)
 		i = 0;
 	}
 	return (NULL);
-}	
+}
 /*
 #include <fcntl.h>
 int main(void)
@@ -78,21 +72,21 @@ int main(void)
 	fd = open("fileread", O_RDONLY);
 	printf("fd is %d\n", fd);
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%s", str); 
 	str = get_next_line(fd);
-	printf("%s\n", str); 
+	printf("%spaco", str); 
 
 
 		free(str);

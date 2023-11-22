@@ -54,6 +54,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	substring[j] = '\0';
 	return (substring);
 }
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		s1_length;
@@ -87,6 +88,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0';
 	return (ft_strlen(src));
 }
+
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	srclength;
