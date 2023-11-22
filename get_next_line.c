@@ -33,6 +33,8 @@ char	*get_next_line(int fd)
 	char		*result;
 
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read == -1)
+		return (NULL);
 	if (stashes[fd] == NULL)
 	{
 		stashes[fd] = malloc(1);
@@ -66,7 +68,7 @@ char	*get_next_line(int fd)
 	}
 	return (NULL);
 }	
-
+/*
 #include <fcntl.h>
 int main(void)
 {
@@ -93,4 +95,4 @@ int main(void)
 
 
 		free(str);
-}
+}*/
