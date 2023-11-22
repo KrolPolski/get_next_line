@@ -15,6 +15,13 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+typedef struct s_stash
+{
+    int             fd;
+    char            *stash;
+    struct s_stash  *next;
+}   t_stash;
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

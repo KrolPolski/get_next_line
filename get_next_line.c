@@ -24,35 +24,47 @@
  * */
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE];
+	static char	*stashes[sizeof(char *) * 256];
+	char		*ptr_parking;
 	int			bytes_read;
-	int			len;
-	int			i;
-	char		*current_line;
+	char		buffer[BUFFER_SIZE];
 	
-	current_line[0] = '\0';
-	i = 0;
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (bytes_read == -1)
-		return (NULL);
-	while(bytes_read != 0)
-	{
-		// handle case of new line coming before end of buffer
-		while (buffer[i] != '\0' && buffer[i] != '\n')
-		{
-			len++;
-			i++;
-		}
-		if (buffer[i] == '\n')
-		{
-			current_line = ft_strjoin(current_line, buffer[i]);
-			return(current_line);
-		}
-		if (buffer[i] == '\0')
-			current_line = ft_strjoin();
-		// handle case of end of buffer coming before new line
+	int			i;
+	char		*result;
 
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (stashes[fd] == NULL)
+	{
+		stashes[fd] = malloc(1);
+		if (stashes[fd] == NULL)
+			return (NULL);
+		// stashes[fd][0] = '\0';
 	}
+	//printf("About to enter the loop \n");
+	while (bytes_read != 0)
+	{
+		while(buffer[i] != '\0')
+		{
+			if (buffer[i] != '\n')
+				i++;
+			else if (buffer[i] == '\n')
+			{
+			//	printf("We found a new line\n");
+				ptr_parking = stashes[fd];
+				result = ft_strjoin(ptr_parking, ft_substr(buffer, 0, i));
+				free(ptr_parking);
+				stashes[fd] = ft_substr(buffer, i, BUFFER_SIZE - i);
+				return (result);
+			}
+		}
+		// this should only trigger if we hit end of buffer without a newline
+		ptr_parking = stashes[fd];
+		stashes[fd] = ft_strjoin(ptr_parking, buffer);
+		free(ptr_parking);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		i = 0;
+	}
+	return (NULL);
 }	
 
 #include <fcntl.h>
