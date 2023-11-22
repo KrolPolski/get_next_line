@@ -35,16 +35,17 @@ char	*get_next_line(int fd)
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == -1)
 		return (NULL);
-	if (stashes[fd] == NULL)
-	{
-		stashes[fd] = malloc(1);
-		if (stashes[fd] == NULL)
-			return (NULL);
-		// stashes[fd][0] = '\0';
-	}
+	
 	//printf("About to enter the loop \n");
 	while (bytes_read != 0)
 	{
+		if (stashes[fd] == NULL)
+		{
+			stashes[fd] = malloc(1);
+			if (stashes[fd] == NULL)
+				return (NULL);
+		// stashes[fd][0] = '\0';
+		}
 		while(buffer[i] != '\0')
 		{
 			if (buffer[i] != '\n')
