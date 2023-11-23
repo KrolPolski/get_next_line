@@ -66,9 +66,10 @@ char	*get_next_line(int fd)
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		i = 0;
 	}
+	free(stashes[fd]);
 	return (NULL);
 }
-
+/*
 #include <fcntl.h>
 int main(void)
 {
@@ -109,4 +110,10 @@ int main(void)
 	str = get_next_line(fd);
 	printf("%s", str); 
 	free(str);
-}
+	printf("Now running single character file test\n");
+	fd = open("1char", O_RDONLY);
+	printf("Fd is now %d\n", fd);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+}*/
