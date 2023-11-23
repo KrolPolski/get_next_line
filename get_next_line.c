@@ -24,13 +24,15 @@
  * */
 char	*get_next_line(int fd)
 {
-	static char	*stashes[sizeof(char *) * 256];
+	static char	*stashes[256];
 	char		*ptr_parking;
 	int			bytes_read;
 	char		buffer[BUFFER_SIZE];
 	int			i;
 	char		*result;
+	char 		*substr_result;
 
+	i = 0;
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == -1)
 		return (NULL);
@@ -46,12 +48,15 @@ char	*get_next_line(int fd)
 		{
 			if (buffer[i] != '\n')
 				i++;
-			else if (buffer[i] == '\n')
+			else if (buffer[i] == '\n' || buffer[i] == 26)
 			{
 				ptr_parking = stashes[fd];
-				result = ft_strjoin(ptr_parking, ft_substr(buffer, 0, i));
+				substr_result = ft_substr(buffer, 0, i);
+				result = ft_strjoin(ptr_parking, substr_result);
 				free(ptr_parking);
-				stashes[fd] = ft_substr(buffer, i, BUFFER_SIZE - i);
+				free(substr_result);
+				if (buffer[i+1] != '\0')
+					stashes[fd] = ft_substr(buffer, i, BUFFER_SIZE - i);
 				return (result);
 			}
 		}
@@ -63,7 +68,7 @@ char	*get_next_line(int fd)
 	}
 	return (NULL);
 }
-/*
+
 #include <fcntl.h>
 int main(void)
 {
@@ -73,21 +78,35 @@ int main(void)
 	printf("fd is %d\n", fd);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
 	printf("%s", str); 
+	free(str);
 	str = get_next_line(fd);
-	printf("%spaco", str); 
-
-
-		free(str);
-}*/
+	printf("%s", str); 
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str); 
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str); 
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str); 
+	free(str);
+}
