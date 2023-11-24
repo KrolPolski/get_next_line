@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:13 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/24 16:11:54 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/24 17:18:32 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ char	*get_next_line(int fd)
 
 	i = 0;
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	buffer[BUFFER_SIZE] = '\0';
-	if (bytes_read == -1)
+	
+	if (bytes_read == -1 || bytes_read == 0)
 		return (NULL);
-	if (bytes_read == 0)
-		return (NULL);
+	buffer[bytes_read] = '\0';
+	//above line got changed from BUFFER_SIZE
 	
 	while (bytes_read != 0)
 	{if (stashes[fd] == NULL)
@@ -51,18 +51,17 @@ char	*get_next_line(int fd)
 		
 		while (buffer[i] != '\0')
 		{
-			
 			if (buffer[i] != '\n')
 				i++;
 			else if (buffer[i] == '\n')
 			{
-				//ptr_parking = stashes[fd];
 				substr_result = ft_substr(buffer, 0, i + 1);
 				if (substr_result == NULL)
 					return (NULL);
 				result = ft_strjoin(stashes[fd], substr_result);
 				if (result == NULL)
 					return (NULL);
+				//printf("result of strjoin is %s", result);
 				free(stashes[fd]);
 				stashes[fd] = NULL;
 				free(substr_result);
@@ -74,11 +73,19 @@ char	*get_next_line(int fd)
 		}
 		ptr_parking = stashes[fd];
 		stashes[fd] = ft_strjoin(ptr_parking, buffer);
+		//printf("result of strjoin is %s\n", stashes[fd]);
 		free(ptr_parking);
 		ptr_parking = NULL;
-		//ft_bzero(buffer, BUFFER_SIZE + 1);
+		if (bytes_read < BUFFER_SIZE)
+			return (stashes[fd]);
+	//	ft_bzero(buffer, BUFFER_SIZE + 1);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		buffer[BUFFER_SIZE] = '\0';
+		if (bytes_read == -1)
+			return (NULL);
+		if (bytes_read == 0)
+			return (stashes[fd]);
+		
+		buffer[bytes_read] = '\0';
 		i = 0;
 	}
 	if (stashes[fd] != NULL)
