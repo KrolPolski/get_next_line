@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:13 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/24 15:42:17 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:49:07 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*get_next_line(int fd)
 			else if (buffer[i] == '\n' || buffer[i] == 26)
 			{
 				//ptr_parking = stashes[fd];
-				substr_result = ft_substr(buffer, 0, i);
+				substr_result = ft_substr(buffer, 0, i + 1);
 				if (substr_result == NULL)
 					return (NULL);
 				result = ft_strjoin(stashes[fd], substr_result);
@@ -62,6 +62,7 @@ char	*get_next_line(int fd)
 				free(stashes[fd]);
 				stashes[fd] = NULL;
 				free(substr_result);
+				substr_result = NULL;
 				if (buffer[i+1] != '\0')
 					stashes[fd] = ft_substr(buffer, i, BUFFER_SIZE - i);
 				return (result);
@@ -70,12 +71,14 @@ char	*get_next_line(int fd)
 		ptr_parking = stashes[fd];
 		stashes[fd] = ft_strjoin(ptr_parking, buffer);
 		free(ptr_parking);
+		ptr_parking = NULL;
 		//ft_bzero(buffer, BUFFER_SIZE + 1);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[BUFFER_SIZE] = '\0';
 		i = 0;
 	}
 	free(stashes[fd]);
+	stashes[fd] = NULL;
 	//ft_bzero(buffer, BUFFER_SIZE + 1);
 	return (NULL);
 }
