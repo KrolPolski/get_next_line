@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:13 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/24 15:49:07 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/24 16:11:54 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,24 @@ char	*get_next_line(int fd)
 	buffer[BUFFER_SIZE] = '\0';
 	if (bytes_read == -1)
 		return (NULL);
+	if (bytes_read == 0)
+		return (NULL);
+	
 	while (bytes_read != 0)
-	{
-		if (stashes[fd] == NULL)
-		{
-			stashes[fd] = malloc(1);
-			if (stashes[fd] == NULL)
-				return (NULL);
-			stashes[fd][0] = '\0';
-		}
+	{if (stashes[fd] == NULL)
+			{
+				stashes[fd] = malloc(1);
+				if (stashes[fd] == NULL)
+					return (NULL);
+				stashes[fd][0] = '\0';
+			}
+		
 		while (buffer[i] != '\0')
 		{
+			
 			if (buffer[i] != '\n')
 				i++;
-			else if (buffer[i] == '\n' || buffer[i] == 26)
+			else if (buffer[i] == '\n')
 			{
 				//ptr_parking = stashes[fd];
 				substr_result = ft_substr(buffer, 0, i + 1);
@@ -77,6 +81,8 @@ char	*get_next_line(int fd)
 		buffer[BUFFER_SIZE] = '\0';
 		i = 0;
 	}
+	if (stashes[fd] != NULL)
+		return(stashes[fd]);
 	free(stashes[fd]);
 	stashes[fd] = NULL;
 	//ft_bzero(buffer, BUFFER_SIZE + 1);
