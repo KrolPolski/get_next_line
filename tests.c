@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:09:24 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 12:11:15 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 12:49:27 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,39 +22,12 @@ int	main(void)
 	fd = open("fileread", O_RDONLY);
 	printf("fd is %d\n", fd);
 	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	printf("Now running single character file test\n");
+	while (str != NULL)
+	{
+		printf("%s", str);
+		free(str);
+		str = get_next_line(fd);
+	}printf("Now running single character file test\n");
 	fd = open("1char", O_RDONLY);
 	printf("Fd is now %d\n", fd);
 	str = get_next_line(fd);
