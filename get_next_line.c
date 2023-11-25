@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 15:39:48 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:52:26 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ char	*get_next_line(int fd)
 	{
 		gnl.result = process_exp_buf(stashes, &gnl, fd);
 		free(gnl.exp_buf);
+		free(stashes[fd]);
 		return (gnl.result);
 	}
 
