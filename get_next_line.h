@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:32 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/24 14:04:20 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 11:47:51 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,17 @@ typedef struct s_stash
 	char			*stash;
 	struct s_stash	*next;
 }	t_stash;
+typedef struct s_gnl
+{
+	int		i;
+	int		bytes_read;
+	char	buffer[BUFFER_SIZE + 1];
+	char	*ptr_parking;
+	char	*result;
+	char	*exp_buf;
+	char	*substr_result;
+} t_gnl;
+
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
