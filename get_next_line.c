@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 14:38:28 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 14:51:17 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,12 @@ char	*get_next_line(int fd)
 	if (!initialize_stashes(stashes, &gnl, fd))
 		return (NULL);
 	if (gnl.bytes_read == 0)
-		return (process_exp_buf(stashes, &gnl, fd));
+	{
+		gnl.result = process_exp_buf(stashes, &gnl, fd);
+		free(gnl.exp_buf);
+		return (gnl.result);
+	}
+
 	//printf("We managed to initialize stashes\n");
 	gnl.result = process_exp_buf(stashes, &gnl, fd);
 	//printf("About to enter read as needed loop")
@@ -95,8 +100,11 @@ char	*get_next_line(int fd)
 	if (!gnl.result)
 		return(gnl.exp_buf);
 	else
-		return(gnl.result);
-	//free(gnl.exp_buf);
-//	printf("We managed to process_exp_buf\n");
+{
+	free(gnl.exp_buf);
+	return(gnl.result);
+}
+		
+	//	printf("We managed to process_exp_buf\n");
 	//return (gnl.result);
 }
