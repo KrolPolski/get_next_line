@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 17:17:52 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 17:23:38 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,8 @@ char	*get_next_line(int fd)
 	//printf("About to enter read as needed loop")
 	while (gnl.result == NULL && gnl.bytes_read > 0)
 	{
-		read_as_needed(stashes, &gnl, fd);
+		if (!read_as_needed(stashes, &gnl, fd))
+			return NULL;
 		gnl.result = process_exp_buf(stashes, &gnl, fd);
 	}
 	// if we get here, we have failed to find an end of line.
