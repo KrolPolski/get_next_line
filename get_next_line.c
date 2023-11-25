@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 14:51:17 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 15:39:48 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 static char	*initialize_stashes(char **stashes, t_gnl *gnl, int fd)
 {
+	if (stashes[fd] == NULL && gnl->buffer[0] == '\0')
+		return (NULL);
 	if (stashes[fd] == NULL)
 	{
 		stashes[fd] = malloc(1);
@@ -41,6 +43,7 @@ static char	*process_exp_buf(char **stashes, t_gnl *gnl, int fd)
 				return (NULL);
 			gnl->i++;
 			free(stashes[fd]);
+			stashes[fd] = NULL;
 			stashes[fd] = ft_substr(gnl->exp_buf, gnl->i, ft_strlen(gnl->exp_buf) - gnl->i);
 			//free(gnl->exp_buf);
 			return (gnl->substr_result);
@@ -57,11 +60,13 @@ static char	*read_as_needed(char **stashes, t_gnl *gnl, int fd)
 	else if (gnl->bytes_read == 0)
 	{
 		free(stashes[fd]);
+		stashes[fd] = NULL;
 		return (gnl->exp_buf);
 	}
 	else
 	{
 		free(stashes[fd]);
+		stashes[fd] = NULL;
 		stashes[fd] = gnl->exp_buf;
 		gnl->exp_buf = ft_strjoin(stashes[fd], gnl->buffer);
 		//process_exp_buf(stashes, gnl, fd);
@@ -98,12 +103,14 @@ char	*get_next_line(int fd)
 	// if we get here, we have failed to find an end of line.
 	//printf("'%s'", gnl.exp_buf);
 	if (!gnl.result)
-		return(gnl.exp_buf);
+	{
+		return (gnl.exp_buf);
+	}
 	else
-{
-	free(gnl.exp_buf);
-	return(gnl.result);
-}
+	{
+		free(gnl.exp_buf);
+		return (gnl.result);
+	}
 		
 	//	printf("We managed to process_exp_buf\n");
 	//return (gnl.result);
