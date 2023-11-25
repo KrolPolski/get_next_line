@@ -6,13 +6,26 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 17:09:16 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 17:17:52 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+	char	*ptr;
+
+	i = 0;
+	ptr = s;
+	while (i < n)
+	{
+		ptr[i] = '\0';
+		i++;
+	}
+}
 static char	*initialize_stashes(char **stashes, t_gnl *gnl, int fd)
 {
 	if (stashes[fd] == NULL && gnl->buffer[0] == '\0')
@@ -52,13 +65,17 @@ static char	*process_exp_buf(char **stashes, t_gnl *gnl, int fd)
 	return (NULL);
 }
 
+
 static char	*read_as_needed(char **stashes, t_gnl *gnl, int fd)
 {
+	ft_bzero(gnl->buffer, BUFFER_SIZE);
 	gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
 	if (gnl->bytes_read == -1)
 	{
 		free(stashes[fd]);
 		stashes[fd] = NULL;
+		free(gnl->substr_result);
+		gnl->substr_result = NULL;
 		return (NULL);
 	}
 	else if (gnl->bytes_read == 0)
