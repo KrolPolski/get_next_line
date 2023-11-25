@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 16:56:02 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 17:09:16 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,11 @@ static char	*read_as_needed(char **stashes, t_gnl *gnl, int fd)
 {
 	gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
 	if (gnl->bytes_read == -1)
+	{
+		free(stashes[fd]);
+		stashes[fd] = NULL;
 		return (NULL);
+	}
 	else if (gnl->bytes_read == 0)
 	{
 		free(stashes[fd]);
@@ -78,10 +82,15 @@ char	*get_next_line(int fd)
 	t_gnl		gnl;
 	static char	*stashes[256];
 
+	if (fd < 0 || fd > 1023)
+		return (NULL);
 	gnl.i = 0;
 	gnl.bytes_read = read(fd, gnl.buffer, BUFFER_SIZE);
 	if (gnl.bytes_read == -1)
+	{
 		return (NULL);
+	}
+		
 	gnl.buffer[gnl.bytes_read] = '\0';
 	if (!initialize_stashes(stashes, &gnl, fd))
 		return (NULL);
