@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 12:02:25 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 12:14:21 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static char	*process_exp_buf(char **stashes, t_gnl *gnl, int fd)
 			if (gnl->substr_result == NULL)
 				return (NULL);
 			gnl->i++;
+			free(stashes[fd]);
 			stashes[fd] = ft_substr(gnl->exp_buf, gnl->i, ft_strlen(gnl->exp_buf) - gnl->i);
 			free(gnl->exp_buf);
 			return (gnl->substr_result);
@@ -63,9 +64,9 @@ static char	*process_exp_buf(char **stashes, t_gnl *gnl, int fd)
 
 char	*get_next_line(int fd)
 {
-	t_gnl	gnl;
+	t_gnl		gnl;
 	static char	*stashes[256];
-	
+
 	gnl.i = 0;
 	gnl.bytes_read = read(fd, gnl.buffer, BUFFER_SIZE);
 	if (gnl.bytes_read == -1)
