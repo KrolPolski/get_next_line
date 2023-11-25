@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 11:52:20 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/25 12:02:25 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static char	*initialize_stashes(char **stashes, t_gnl *gnl, int fd)
 		if (stashes[fd] == NULL)
 			return (NULL);
 		stashes[fd][0] = '\0';
-		gnl->exp_buf = ft_strjoin(stashes[fd], gnl->buffer);
-		return (gnl->exp_buf);
 	}
+	gnl->exp_buf = ft_strjoin(stashes[fd], gnl->buffer);
+	return (gnl->exp_buf);
 }
 
 static char	*process_exp_buf(char **stashes, t_gnl *gnl, int fd)
@@ -42,9 +42,22 @@ static char	*process_exp_buf(char **stashes, t_gnl *gnl, int fd)
 			gnl->i++;
 			stashes[fd] = ft_substr(gnl->exp_buf, gnl->i, ft_strlen(gnl->exp_buf) - gnl->i);
 			free(gnl->exp_buf);
-			return(gnl->substr_result);
+			return (gnl->substr_result);
 		}
 	}
+	gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
+	if (gnl->bytes_read == -1)
+		return (NULL);
+	else if (gnl->bytes_read == 0)
+		return (gnl->exp_buf);
+	else
+	{
+		free(stashes[fd]);
+		stashes[fd] = gnl->exp_buf;
+		gnl->exp_buf = ft_strjoin(stashes[fd], gnl->buffer);
+		process_exp_buf(stashes, gnl, fd);
+	}
+	return (NULL);
 }
 
 
@@ -60,8 +73,8 @@ char	*get_next_line(int fd)
 	gnl.buffer[gnl.bytes_read] = '\0';
 	if (!initialize_stashes(stashes, &gnl, fd))
 		return (NULL);
-	printf("We managed to initialize stashes\n");
+	//printf("We managed to initialize stashes\n");
 	gnl.result = process_exp_buf(stashes, &gnl, fd);
-	printf("We managed to process_exp_buf\n");
+	//printf("We managed to process_exp_buf\n");
 	return (gnl.result);
 }

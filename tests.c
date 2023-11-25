@@ -41,7 +41,7 @@ int main(void)
 	str = get_next_line(fd);
 	printf("%s", str); 
 	free(str);
-	/*printf("Now running single character file test\n");
+	printf("Now running single character file test\n");
 	fd = open("1char", O_RDONLY);
 	printf("Fd is now %d\n", fd);
 	str = get_next_line(fd);
@@ -51,12 +51,12 @@ int main(void)
 	fd = open("alpha_nonl", O_RDONLY);
 	printf("FD is now %d\n", fd);
 	str = get_next_line(fd);
-	printf("%s", str);
+	printf("%s\n", str);
 	free(str);
 	printf("Now running single character no nl char test\n");
 	fd = open("1char_nonl", O_RDONLY);
 	str = get_next_line(fd);
-	printf("%s", str);
+	printf("%s\n", str);
 	free(str);
 	printf("Now running multiple nl only test\n");
 	fd = open("mult_nl", O_RDONLY);
@@ -74,5 +74,5 @@ int main(void)
 	free(str);
 	str = get_next_line(fd);
 	printf("%s", str);
-	free(str);*/
+	free(str);
 }
