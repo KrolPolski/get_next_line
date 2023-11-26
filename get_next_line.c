@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 15:15:39 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/26 16:38:04 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,16 @@ char	*process_buffer(char *stash, t_gnl *gnl, int fd)
 		stash = ft_substr(gnl->ptr_parking, gnl->ptr_parking - gnl->strchr_result, ft_strlen(gnl->ptr_parking) - 1);
 		free(gnl->ptr_parking);
 		gnl->ptr_parking = NULL;
+		if (stash[0] == '\0')
+		{
+			free(stash);
+			stash = NULL;
+		}
+		if (gnl->result[0] == '\0')
+		{
+			free(gnl->result);
+			gnl->result = NULL;
+		}
 		return (gnl->result);
 	}
 }
