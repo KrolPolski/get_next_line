@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:32 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 12:13:14 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/26 18:53:06 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_gnl
 	char	*substr_result;
 	char	*strchr_result;
 }	t_gnl;
-
+char	*ft_strchr(const char *s, int c);
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

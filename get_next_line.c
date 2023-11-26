@@ -5,110 +5,102 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 16:38:04 by rboudwin         ###   ########.fr       */
+/*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
+/*   Updated: 2023/11/26 19:28:32 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-void	ft_bzero(void *s, size_t n)
+char	*ft_read_as_needed(int fd, char *stash)
 {
-	size_t	i;
-	char	*ptr;
+	char	*buffer;
+	int		bytes_read;
 
-	i = 0;
-	ptr = s;
-	while (i < n)
-	{
-		ptr[i] = '\0';
-		i++;
-	}
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i] != c && s[i] != '\0')
-		i++;
-	if (s[i] == c)
-		return ((char *)&s[i]);
-	else
+	buffer = malloc(BUFFER_SIZE + 1);
+	if (!buffer)
 		return (NULL);
-}
+	bytes_read = 1;
 
-char	*ft_strdup(const char *s1)
-{
-	int		length;
-	char	*s2;
-
-	length = ft_strlen(s1);
-	s2 = malloc(length + 1);
-	if (s2 == NULL)
-		return (NULL);
-	ft_strlcpy(s2, s1, length + 1);
-	return (s2);
-}
-
-char	*process_buffer(char *stash, t_gnl *gnl, int fd)
-{
-	ft_bzero(gnl->buffer, BUFFER_SIZE + 1);
-	gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
-	if (gnl->bytes_read == -1)
-		return (NULL);
-	if (stash == NULL && gnl->bytes_read == 0)
-		return (NULL);
-	gnl->buffer[gnl->bytes_read] = '\0';
-
-	if (stash == NULL)
-		stash = ft_strdup(gnl->buffer);
-	else
+	while (!ft_strchr(stash, '\n') && bytes_read != 0)
 	{
-		gnl->ptr_parking = stash;
-		stash = ft_strjoin(stash, gnl->buffer);
-		free(gnl->ptr_parking);
-		gnl->ptr_parking = NULL;
-	}
-	while (!ft_strchr(stash, '\n') && gnl->bytes_read > 0)
-	{
-		gnl->ptr_parking = stash;
-		ft_bzero(gnl->buffer, BUFFER_SIZE + 1);
-		gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
-		stash = ft_strjoin(gnl->ptr_parking, gnl->buffer);
-		free(gnl->ptr_parking);
-		gnl->ptr_parking = NULL;
-	}
-	gnl->strchr_result = ft_strchr(stash, '\n');
-	if (!gnl->strchr_result)
-		return(stash);
-	else
-	{
-		gnl->result = ft_substr(stash, 0, stash - gnl->strchr_result + 1);
-		gnl->ptr_parking = stash;
-		stash = ft_substr(gnl->ptr_parking, gnl->ptr_parking - gnl->strchr_result, ft_strlen(gnl->ptr_parking) - 1);
-		free(gnl->ptr_parking);
-		gnl->ptr_parking = NULL;
-		if (stash[0] == '\0')
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
 		{
-			free(stash);
-			stash = NULL;
+			free(buffer);
+			buffer = NULL;
+			return (NULL);
 		}
-		if (gnl->result[0] == '\0')
-		{
-			free(gnl->result);
-			gnl->result = NULL;
-		}
-		return (gnl->result);
+		buffer[bytes_read] = '\0';
+		stash = ft_strjoin(stash, buffer);
 	}
+	free(buffer);
+	buffer = NULL;
+	return (stash);
 }
+
+char	*ft_fetch_line(char *stash)
+{
+	char	*line;
+	int		i;
+	int		k;
+
+	if (!stash)
+		return (NULL);
+	i = 0;
+	while (stash[i] != '\0' && stash[i] != '\n')
+		i++;
+	line = malloc(i + 2);
+	if (line == NULL)
+		return (NULL);
+	k = 0;
+	while (k <= i)
+	{
+		line[k] = stash[k];
+		k++;
+	}
+	if (stash[k] == '\n')
+	{
+		line[k] = stash[k];
+		k++;
+	}
+	line[k] = '\0';
+	return (line);
+}
+
+char	*ft_trim_stash(char *stash)
+{
+	char	*strchr_result;
+
+	strchr_result = ft_strchr(stash, '\n');
+	if (!strchr_result)
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
+	else
+		return (strchr_result);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
-	t_gnl 		gnl;
+	static char	*stash;
+	char		*line;
 
-	if (fd < 0 || fd > 1023)
+	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
 		return (NULL);
-	return (process_buffer(stash, &gnl, fd));
+	if (stash == NULL)
+	{
+		stash = malloc(1);
+		if (!stash)
+			return (NULL);
+		stash[0] = '\0';
+	}
+	stash = ft_read_as_needed(fd, stash);
+//printf("after reads stash is '%s'", stash);
+	line = ft_fetch_line(stash);
+	stash = ft_trim_stash(stash);
+	return (line);
 }

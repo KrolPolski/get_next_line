@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:09:24 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/25 14:47:31 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/26 15:41:23 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ int	main(void)
 		free(str);
 		str = get_next_line(fd);
 		printf("%s", str);
-		free(str);
+		//free(str);
 		str = get_next_line(fd);
 		printf("%s", str);
-		free(str);
+		//free(str);
 		str = get_next_line(fd);
 		printf("%s", str);
-		free(str);
+	//	free(str);
 		
-}
-	/*
+
+	
 	printf("Now running single character file test\n");
 	fd = open("1char", O_RDONLY);
 	printf("Fd is now %d\n", fd);
@@ -93,4 +93,9 @@ int	main(void)
 	str = get_next_line(fd);
 	printf("%s", str);
 	free(str);
-}*/
+	fd = open("only_nl.txt", O_RDONLY);
+	str = get_next_line(fd);
+	printf("Now trying only_nl.txt");
+	printf("%s", str);
+	free(str);
+}
