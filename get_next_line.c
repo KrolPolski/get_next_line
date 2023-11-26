@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 11:15:14 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 12:30:15 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/26 15:15:39 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ char	*process_buffer(char *stash, t_gnl *gnl, int fd)
 	gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
 	if (gnl->bytes_read == -1)
 		return (NULL);
+	if (stash == NULL && gnl->bytes_read == 0)
+		return (NULL);
 	gnl->buffer[gnl->bytes_read] = '\0';
+
 	if (stash == NULL)
 		stash = ft_strdup(gnl->buffer);
 	else
@@ -82,7 +85,7 @@ char	*process_buffer(char *stash, t_gnl *gnl, int fd)
 		return(stash);
 	else
 	{
-		gnl->result = ft_substr(stash, 0, stash - gnl->strchr_result);
+		gnl->result = ft_substr(stash, 0, stash - gnl->strchr_result + 1);
 		gnl->ptr_parking = stash;
 		stash = ft_substr(gnl->ptr_parking, gnl->ptr_parking - gnl->strchr_result, ft_strlen(gnl->ptr_parking) - 1);
 		free(gnl->ptr_parking);
