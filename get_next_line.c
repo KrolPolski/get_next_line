@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/27 11:18:57 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/27 13:47:00 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,16 @@ char	*ft_read_as_needed(int fd, char *stash)
 	int		bytes_read;
 	char	*ptr_parking;
 
+	if (ft_strchr(stash, '\n'))
+	{
+		return (stash);
+	}
 	ptr_parking = NULL;
 	bytes_read = 1;
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
+	
 	while (!ft_strchr(stash, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -33,7 +38,7 @@ char	*ft_read_as_needed(int fd, char *stash)
 			buffer = NULL;
 			return (NULL);
 		}
-		if (bytes_read == 0)
+		else if (bytes_read == 0)
 		{
 			free(buffer);
 			buffer = NULL;
@@ -98,10 +103,21 @@ char	*ft_trim_stash(char *stash)
 		stash = NULL;
 		return (NULL);
 	}
+	// let's think through the problem. we get heap overflow if we go outside of bounds. that
+	// +1 is doing that in some cases.
 	else
+	if (ft_strchr(stash, '\n') && ft_strlen(stash) == 1)
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
 	{
 		ptr_parking = stash;
-		stash = ft_substr(stash, strchr_result + 1 - stash, ft_strlen(stash));
+		//this line is causing the heap overflow, but the code doesn't work without the + 1;
+		//it is probably triggering only at the end of a file. 
+		// if (strchr_result[1] != '\0')
+		stash = ft_substr(stash, (strchr_result - stash) + 1, ft_strlen(stash));
 		free(ptr_parking);
 		ptr_parking = NULL;
 		return (stash);
@@ -115,10 +131,12 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
 		return (NULL);
-
 	stash = ft_read_as_needed(fd, stash);
-//printf("after reads stash is '%s'", stash);
+	if (!stash)
+		return (NULL);
 	line = ft_fetch_line(stash);
+	if (!line)
+		return (NULL);
 	stash = ft_trim_stash(stash);
 	return (line);
 }
