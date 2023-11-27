@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:09:24 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 15:41:23 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/27 09:31:23 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	main(void)
 	printf("Now running single character no nl char test\n");
 	fd = open("1char_nonl", O_RDONLY);
 	str = get_next_line(fd);
-	printf("%s\n", str);
+	printf("%s", str);
 	free(str);
 	printf("Now running multiple nl only test\n");
 	fd = open("mult_nl", O_RDONLY);
