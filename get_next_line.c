@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/27 11:10:47 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:18:57 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ char	*ft_read_as_needed(int fd, char *stash)
 			buffer = NULL;
 			return (NULL);
 		}
+		if (bytes_read == 0)
+		{
+			free(buffer);
+			buffer = NULL;
+			return (stash);
+		}
 		buffer[bytes_read] = '\0';
 		if (stash == NULL)
 		{
@@ -43,12 +49,9 @@ char	*ft_read_as_needed(int fd, char *stash)
 		}
 		ptr_parking = stash;
 		stash = ft_strjoin(stash, buffer);
-
-		//printf("ptr_parking is currently '%s'\n", ptr_parking);
 		free(ptr_parking);
 		ptr_parking = NULL;
 	}
-	//printf("After reads the stash is now %s", stash);
 	free(buffer);
 	buffer = NULL;
 	return (stash);
