@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 19:28:32 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/27 09:27:06 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*ft_read_as_needed(int fd, char *stash)
 		buffer[bytes_read] = '\0';
 		stash = ft_strjoin(stash, buffer);
 	}
+	printf("After reads the stash is now '%s", stash);
 	free(buffer);
 	buffer = NULL;
 	return (stash);
@@ -81,7 +82,9 @@ char	*ft_trim_stash(char *stash)
 		return (NULL);
 	}
 	else
-		return (strchr_result);
+	{
+		return (strchr_result + 1);
+	}
 }
 
 char	*get_next_line(int fd)
@@ -99,7 +102,7 @@ char	*get_next_line(int fd)
 		stash[0] = '\0';
 	}
 	stash = ft_read_as_needed(fd, stash);
-//printf("after reads stash is '%s'", stash);
+printf("after reads stash is '%s'", stash);
 	line = ft_fetch_line(stash);
 	stash = ft_trim_stash(stash);
 	return (line);
