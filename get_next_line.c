@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/27 13:47:00 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/27 13:55:54 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	*ft_trim_stash(char *stash)
 	// let's think through the problem. we get heap overflow if we go outside of bounds. that
 	// +1 is doing that in some cases.
 	else
-	if (ft_strchr(stash, '\n') && ft_strlen(stash) == 1)
+	if (ft_strchr(stash, '\n') && ft_strlen(strchr_result) == 1)
 	{
 		free(stash);
 		stash = NULL;
