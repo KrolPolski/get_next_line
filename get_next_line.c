@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/27 13:55:54 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 09:58:52 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*ft_fetch_line(char *stash)
 	i = 0;
 	while (stash[i] != '\0' && stash[i] != '\n')
 		i++;
-	line = malloc(i + 2);
+	line = malloc(i + 3);
 	if (line == NULL)
 		return (NULL);
 	k = 0;
@@ -82,10 +82,13 @@ char	*ft_fetch_line(char *stash)
 		line[k] = stash[k];
 		k++;
 	}
-	if (stash[k] == '\n')
+	if (stash[i] != '\0')
 	{
-		line[k] = stash[k];
-		k++;
+		if (stash[k] == '\n')
+		{
+			line[k] = stash[k];
+			k++;
+		}
 	}
 	line[k] = '\0';
 	return (line);
