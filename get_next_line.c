@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 10:34:38 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:52:46 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,39 +30,33 @@ char	*ft_strchr(const char *s, int c)
 		return (NULL);
 }
 
-char	*ft_read_as_needed(int fd, char *stash)
+char	*ft_read_as_needed(int fd, char *stash, t_gnl *gnl)
 {
-	char	*buffer;
-	int		bytes_read;
-	char	*ptr_parking;
-
 	if (ft_strchr(stash, '\n'))
-	{
 		return (stash);
-	}
-	ptr_parking = NULL;
-	bytes_read = 1;
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
+	gnl->ptr_parking = NULL;
+	gnl->bytes_read = 1;
+	gnl->buffer = malloc(BUFFER_SIZE + 1);
+	if (!gnl->buffer)
 		return (NULL);
-	while (!ft_strchr(stash, '\n') && bytes_read != 0)
+	while (!ft_strchr(stash, '\n') && gnl->bytes_read != 0)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
+		gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
+		if (gnl->bytes_read == -1)
 		{
-			free(buffer);
+			free(gnl->buffer);
 			free(stash);
 			stash = NULL;
-			buffer = NULL;
+			gnl->buffer = NULL;
 			return (NULL);
 		}
-		else if (bytes_read == 0)
+		else if (gnl->bytes_read == 0)
 		{
-			free(buffer);
-			buffer = NULL;
+			free(gnl->buffer);
+			gnl->buffer = NULL;
 			return (stash);
 		}
-		buffer[bytes_read] = '\0';
+		gnl->buffer[gnl->bytes_read] = '\0';
 		if (stash == NULL)
 		{
 			stash = malloc(1);
@@ -70,71 +64,64 @@ char	*ft_read_as_needed(int fd, char *stash)
 				return (NULL);
 			stash[0] = '\0';
 		}
-		ptr_parking = stash;
-		stash = ft_strjoin(stash, buffer);
-		free(ptr_parking);
-		ptr_parking = NULL;
+		gnl->ptr_parking = stash;
+		stash = ft_strjoin(stash, gnl->buffer);
+		free(gnl->ptr_parking);
+		gnl->ptr_parking = NULL;
 	}
-	free(buffer);
-	buffer = NULL;
+	free(gnl->buffer);
+	gnl->buffer = NULL;
 	return (stash);
 }
 
-char	*ft_fetch_line(char *stash)
+char	*ft_fetch_line(char *stash, t_gnl *gnl)
 {
-	char	*line;
-	int		i;
-	int		k;
-
 	if (!stash)
 		return (NULL);
-	i = 0;
-	while (stash[i] != '\0' && stash[i] != '\n')
-		i++;
-	line = malloc(i + 3);
-	if (line == NULL)
+	gnl->i = 0;
+	while (stash[gnl->i] != '\0' && stash[gnl->i] != '\n')
+		gnl->i++;
+	gnl->line = malloc(gnl->i + 3);
+	if (gnl->line == NULL)
 		return (NULL);
-	k = 0;
-	while (k <= i)
+	gnl->k = 0;
+	while (gnl->k <= gnl->i)
 	{
-		line[k] = stash[k];
-		k++;
+		gnl->line[gnl->k] = stash[gnl->k];
+		gnl->k++;
 	}
-	if (stash[i] != '\0')
+	if (stash[gnl->i] != '\0')
 	{
-		if (stash[k] == '\n' && stash[k - 1] != '\n')
+		if (stash[gnl->k] == '\n' && stash[gnl->k - 1] != '\n')
 		{
-			line[k] = stash[k];
-			k++;
+			gnl->line[gnl->k] = stash[gnl->k];
+			gnl->k++;
 		}
 	}
-	line[k] = '\0';
-	return (line);
+	gnl->line[gnl->k] = '\0';
+	return (gnl->line);
 }
 
-char	*ft_trim_stash(char *stash)
+char	*ft_trim_stash(char *stash, t_gnl *gnl)
 {
-	char	*strchr_result;
-	char	*ptr_parking;
-
-	strchr_result = ft_strchr(stash, '\n');
-	if (!strchr_result)
+	gnl->strchr_result = ft_strchr(stash, '\n');
+	if (!gnl->strchr_result)
 	{
 		free(stash);
 		stash = NULL;
 		return (NULL);
 	}
-	else if (ft_strchr(stash, '\n') && ft_strlen(strchr_result) == 1)
+	else if (ft_strchr(stash, '\n') && ft_strlen(gnl->strchr_result) == 1)
 	{
 		free(stash);
 		stash = NULL;
 		return (NULL);
 	}
 	{
-		ptr_parking = stash;
-		stash = ft_substr(stash, (strchr_result - stash) + 1, ft_strlen(stash));
-		free(ptr_parking);
-		ptr_parking = NULL;
+		gnl->ptr_parking = stash;
+		stash = ft_substr(stash, (gnl->strchr_result - stash) + 1, ft_strlen(stash));
+		free(gnl->ptr_parking);
+		gnl->ptr_parking = NULL;
 		return (stash);
 	}
 }
@@ -142,16 +129,16 @@ char	*ft_trim_stash(char *stash)
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	char		*line;
+	t_gnl		gnl;
 
 	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = ft_read_as_needed(fd, stash);
+	stash = ft_read_as_needed(fd, stash, &gnl);
 	if (!stash)
 		return (NULL);
-	line = ft_fetch_line(stash);
-	if (!line)
+	gnl.line = ft_fetch_line(stash, &gnl);
+	if (!gnl.line)
 		return (NULL);
-	stash = ft_trim_stash(stash);
-	return (line);
+	stash = ft_trim_stash(stash, &gnl);
+	return (gnl.line);
 }

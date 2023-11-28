@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:32 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/26 18:53:06 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:43:38 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,14 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-typedef struct s_stash
-{
-	int				fd;
-	char			*stash;
-	struct s_stash	*next;
-}	t_stash;
 typedef struct s_gnl
 {
 	int		i;
+	int		k;
 	int		bytes_read;
-	char	buffer[BUFFER_SIZE + 1];
+	char	*buffer;
 	char	*ptr_parking;
-	char	*result;
-	char	*exp_buf;
-	char	*substr_result;
+	char	*line;
 	char	*strchr_result;
 }	t_gnl;
 char	*ft_strchr(const char *s, int c);
