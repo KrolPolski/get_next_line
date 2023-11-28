@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 09:58:52 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:19:10 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_fetch_line(char *stash)
 	}
 	if (stash[i] != '\0')
 	{
-		if (stash[k] == '\n')
+		if (stash[k] == '\n' && stash[k - 1] != '\n')
 		{
 			line[k] = stash[k];
 			k++;
@@ -106,10 +106,7 @@ char	*ft_trim_stash(char *stash)
 		stash = NULL;
 		return (NULL);
 	}
-	// let's think through the problem. we get heap overflow if we go outside of bounds. that
-	// +1 is doing that in some cases.
-	else
-	if (ft_strchr(stash, '\n') && ft_strlen(strchr_result) == 1)
+	else if (ft_strchr(stash, '\n') && ft_strlen(strchr_result) == 1)
 	{
 		free(stash);
 		stash = NULL;
@@ -117,9 +114,6 @@ char	*ft_trim_stash(char *stash)
 	}
 	{
 		ptr_parking = stash;
-		//this line is causing the heap overflow, but the code doesn't work without the + 1;
-		//it is probably triggering only at the end of a file. 
-		// if (strchr_result[1] != '\0')
 		stash = ft_substr(stash, (strchr_result - stash) + 1, ft_strlen(stash));
 		free(ptr_parking);
 		ptr_parking = NULL;
