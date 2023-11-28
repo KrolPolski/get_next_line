@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 10:52:46 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:56:38 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,16 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_read_as_needed(int fd, char *stash, t_gnl *gnl)
 {
-	if (ft_strchr(stash, '\n'))
-		return (stash);
-	gnl->ptr_parking = NULL;
-	gnl->bytes_read = 1;
-	gnl->buffer = malloc(BUFFER_SIZE + 1);
-	if (!gnl->buffer)
-		return (NULL);
 	while (!ft_strchr(stash, '\n') && gnl->bytes_read != 0)
 	{
 		gnl->bytes_read = read(fd, gnl->buffer, BUFFER_SIZE);
-		if (gnl->bytes_read == -1)
+		if (gnl->bytes_read == -1 || gnl->bytes_read == 0)
 		{
-			free(gnl->buffer);
-			free(stash);
-			stash = NULL;
-			gnl->buffer = NULL;
+			if (gnl->bytes_read == -1)
+				free(stash);
+			if (gnl->bytes_read == 0)
+				return (stash);
 			return (NULL);
-		}
-		else if (gnl->bytes_read == 0)
-		{
-			free(gnl->buffer);
-			gnl->buffer = NULL;
-			return (stash);
 		}
 		gnl->buffer[gnl->bytes_read] = '\0';
 		if (stash == NULL)
@@ -67,10 +54,7 @@ char	*ft_read_as_needed(int fd, char *stash, t_gnl *gnl)
 		gnl->ptr_parking = stash;
 		stash = ft_strjoin(stash, gnl->buffer);
 		free(gnl->ptr_parking);
-		gnl->ptr_parking = NULL;
 	}
-	free(gnl->buffer);
-	gnl->buffer = NULL;
 	return (stash);
 }
 
@@ -119,7 +103,8 @@ char	*ft_trim_stash(char *stash, t_gnl *gnl)
 	}
 	{
 		gnl->ptr_parking = stash;
-		stash = ft_substr(stash, (gnl->strchr_result - stash) + 1, ft_strlen(stash));
+		stash = ft_substr(stash, (gnl->strchr_result - stash) + 1,
+				ft_strlen(stash));
 		free(gnl->ptr_parking);
 		gnl->ptr_parking = NULL;
 		return (stash);
@@ -133,7 +118,16 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
 		return (NULL);
-	stash = ft_read_as_needed(fd, stash, &gnl);
+	gnl.ptr_parking = NULL;
+	gnl.bytes_read = 1;
+	if (!ft_strchr(stash, '\n'))
+	{
+		gnl.buffer = malloc(BUFFER_SIZE + 1);
+		if (!gnl.buffer)
+			return (NULL);
+		stash = ft_read_as_needed(fd, stash, &gnl);
+		free(gnl.buffer);
+	}
 	if (!stash)
 		return (NULL);
 	gnl.line = ft_fetch_line(stash, &gnl);
