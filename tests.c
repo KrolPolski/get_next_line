@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 12:09:24 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/27 09:31:23 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:38:29 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,42 +23,36 @@ int	main(void)
 	printf("fd is %d\n", fd);
 	str = get_next_line(fd);
 	printf("%s", str);
-		free(str);
-	//while (str != NULL)
-//	{
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		//free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-		//free(str);
-		str = get_next_line(fd);
-		printf("%s", str);
-	//	free(str);
-		
-
-	
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
+	free(str);
+	str = get_next_line(fd);
+	printf("%s", str);
 	printf("Now running single character file test\n");
 	fd = open("1char", O_RDONLY);
 	printf("Fd is now %d\n", fd);

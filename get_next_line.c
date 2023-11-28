@@ -6,12 +6,29 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 10:29:05 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:34:38 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+
+char	*ft_strchr(const char *s, int c)
+{
+	int		i;
+	char	a;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	a = (char)c;
+	while (s[i] != a && s[i] != '\0')
+		i++;
+	if (s[i] == a)
+		return ((char *)&s[i]);
+	else
+		return (NULL);
+}
 
 char	*ft_read_as_needed(int fd, char *stash)
 {
@@ -28,7 +45,6 @@ char	*ft_read_as_needed(int fd, char *stash)
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	
 	while (!ft_strchr(stash, '\n') && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
