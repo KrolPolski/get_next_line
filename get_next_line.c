@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 10:19:10 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:29:05 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ char	*ft_read_as_needed(int fd, char *stash)
 		if (bytes_read == -1)
 		{
 			free(buffer);
+			free(stash);
+			stash = NULL;
 			buffer = NULL;
 			return (NULL);
 		}
