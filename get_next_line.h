@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:32 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 11:53:29 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/28 16:22:26 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
 typedef struct s_gnl
 {
