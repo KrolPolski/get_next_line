@@ -6,11 +6,11 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/29 12:34:31 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/29 20:25:41 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	free_and_null(void *ptr)
 {
