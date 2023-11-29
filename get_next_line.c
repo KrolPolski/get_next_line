@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 18:24:49 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/29 10:30:03 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:29:10 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ char	*ft_read_as_needed(int fd, char *stash, t_gnl *gnl)
 		if (gnl->bytes_read == -1 || gnl->bytes_read == 0)
 		{
 			if (gnl->bytes_read == -1)
+			{
 				free(stash);
+				stash = NULL;
+			}
 			if (gnl->bytes_read == 0)
 				return (stash);
 			return (NULL);
@@ -53,6 +56,7 @@ char	*ft_read_as_needed(int fd, char *stash, t_gnl *gnl)
 		gnl->ptr_parking = stash;
 		stash = ft_strjoin(stash, gnl->buffer);
 		free(gnl->ptr_parking);
+		gnl->ptr_parking = NULL;
 	}
 	return (stash);
 }
@@ -68,7 +72,9 @@ char	*ft_fetch_line(char *stash, t_gnl *gnl)
 		gnl->i++;
 	gnl->line = malloc(gnl->i + 1);
 	if (gnl->line == NULL)
+	{
 		return (NULL);
+	}
 	gnl->k = 0;
 	while (gnl->k < gnl->i)
 	{
@@ -101,7 +107,7 @@ char	*ft_trim_stash(char *stash, t_gnl *gnl)
 		free(stash);
 		stash = NULL;
 		return (NULL);
-	}
+	}	
 	{
 		gnl->ptr_parking = stash;
 		stash = ft_substr(stash, (gnl->strchr_result - stash) + 1,
@@ -125,15 +131,27 @@ char	*get_next_line(int fd)
 	{
 		gnl.buffer = malloc(BUFFER_SIZE + 1);
 		if (!gnl.buffer)
+		{
+			if (stash != NULL)
+			{
+				free(stash);
+				stash = NULL;
+			}
 			return (NULL);
+		}
 		stash = ft_read_as_needed(fd, stash, &gnl);
 		free(gnl.buffer);
+		gnl.buffer = NULL;
 	}
 	if (!stash)
 		return (NULL);
 	gnl.line = ft_fetch_line(stash, &gnl);
 	if (!gnl.line)
+	{
+		free(stash);
+		stash = NULL;
 		return (NULL);
+	}
 	stash = ft_trim_stash(stash, &gnl);
 	return (gnl.line);
 }
