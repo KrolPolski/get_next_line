@@ -6,7 +6,7 @@
 /*   By: rboudwin <rboudwin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:26:23 by rboudwin          #+#    #+#             */
-/*   Updated: 2023/11/28 10:36:33 by rboudwin         ###   ########.fr       */
+/*   Updated: 2023/11/29 12:30:20 by rboudwin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		s1_length;
 	int		s2_length;
 	char	*new_string;
+	int		i;
 
 	if (s1 == NULL || s2 == NULL)
 		return (NULL);
@@ -68,25 +69,32 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	new_string = malloc(s1_length + s2_length + 1);
 	if (new_string == NULL)
 		return (NULL);
-	ft_strlcpy(new_string, s1, s1_length + 1);
+	i = 0;
+	while (i < s1_length && s1[i] != '\0')
+	{
+		new_string[i] = s1[i];
+		i++;
+	}
+	new_string[i] = '\0';
 	ft_strlcat(new_string, s2, s1_length + s2_length + 1);
 	return (new_string);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+char	*ft_strchr(const char *s, int c)
 {
-	size_t	i;
+	int		i;
+	char	a;
 
+	if (!s)
+		return (NULL);
 	i = 0;
-	if (dstsize == 0)
-		return (ft_strlen(src));
-	while (i < dstsize - 1 && src[i] != '\0')
-	{
-		dst[i] = src[i];
+	a = (char)c;
+	while (s[i] != a && s[i] != '\0')
 		i++;
-	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
+	if (s[i] == a)
+		return ((char *)&s[i]);
+	else
+		return (NULL);
 }
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
